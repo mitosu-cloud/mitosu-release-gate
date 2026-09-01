@@ -1,0 +1,67 @@
+{
+  "schema": "io.mitosu.release-gate-policy/v1",
+  "issuer": "https://token.actions.githubusercontent.com",
+  "gate_repository": "mitosu-cloud/mitosu-release-gate",
+  "gate_repository_id": "1353141754",
+  "gate_repository_visibility": "public",
+  "allowed_actor_ids": [
+    "1031878"
+  ],
+  "allowed_reviewer_ids": [
+    "1031878"
+  ],
+  "required_review_state": "approved",
+  "event_name": "workflow_dispatch",
+  "ref": "refs/heads/main",
+  "require_live_branch_protection": true,
+  "runner_environment": "self-hosted",
+  "source_repository": "mitosu-cloud/mitosuagent",
+  "maximum_request_age_seconds": 480,
+  "maximum_clock_skew_seconds": 30,
+  "controller_encryption": {
+    "format": "CMS AuthEnvelopedData DER with AES-256-GCM",
+    "minimum_rsa_bits": 3072,
+    "certificate_is_one_time": true,
+    "private_key_must_not_leave_controller": true
+  },
+  "authorizations": {
+    "release": {
+      "environment": "agent-release-approve",
+      "subject": "repo:mitosu-cloud/mitosu-release-gate:environment:agent-release-approve",
+      "workflow_ref": "mitosu-cloud/mitosu-release-gate/.github/workflows/authorize-release.yml@refs/heads/main",
+      "audience_prefix": "urn:mitosu:release-gate:v1:release:sha256:"
+    },
+    "promotion": {
+      "environment": "agent-release-promote",
+      "subject": "repo:mitosu-cloud/mitosu-release-gate:environment:agent-release-promote",
+      "workflow_ref": "mitosu-cloud/mitosu-release-gate/.github/workflows/authorize-promotion.yml@refs/heads/main",
+      "audience_prefix": "urn:mitosu:release-gate:v1:promotion:sha256:"
+    }
+  },
+  "required_oidc_claims": [
+    "iss",
+    "aud",
+    "sub",
+    "exp",
+    "iat",
+    "nbf",
+    "jti",
+    "repository",
+    "repository_id",
+    "repository_visibility",
+    "actor_id",
+    "event_name",
+    "ref",
+    "workflow_ref",
+    "workflow_sha",
+    "run_id",
+    "run_attempt",
+    "environment",
+    "runner_environment"
+  ],
+  "single_use": [
+    "oidc.jti",
+    "controller.request_id",
+    "gate.run_id+gate.run_attempt"
+  ]
+}
