@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Validate source-free gate
+    runs-on:
+      group: public-gate-ci
+      labels: [self-hosted, Linux, X64, mitosu-public-gate-ci]
+    timeout-minutes: 5
+    steps:
+      - name: Check out gate policy
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Validate workflow invariants
+        run: python3 scripts/check_workflows.py
